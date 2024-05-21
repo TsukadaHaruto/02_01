@@ -4,16 +4,47 @@
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() {
+
+	delete sprite_;
+	delete player_;
+	delete model_;
+}
 
 void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+
+	// ファイル名を指定してテクスチャを読み込む
+	texturureHandle_ = TextureManager::Load("mario.png");
+	// 3Dモデルの生成
+	model_ = Model::Create();
+	// ワールドトランスフォームの初期化
+	worldTransform_.Initialize();
+	// ビュープロジェクションの初期化
+	viewProjection_.Initialize();
+
+	sprite_ = Sprite::Create(texturureHandle_, {80, 40});
+
+	// 自キャラの生成
+	player_ = new Player();
+
+	player_->Initialize(model_, texturureHandle_, &viewProjection_);
 }
 
-void GameScene::Update() {}
+void GameScene::Update() {
+
+	player_->Update();
+
+	Vector2 Position = sprite_->GetPosition();
+
+	Position.x += 2.0f;
+	Position.y += 1.0f;
+
+	sprite_->SetPosition(Position);
+}
 
 void GameScene::Draw() {
 
@@ -26,7 +57,8 @@ void GameScene::Draw() {
 
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
-	/// </summary>
+	/// </summary
+	sprite_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -41,6 +73,8 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+	///
+	player_->Draw();
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

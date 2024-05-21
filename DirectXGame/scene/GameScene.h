@@ -4,19 +4,33 @@
 #include "DirectXCommon.h"
 #include "Input.h"
 #include "Model.h"
+#include "SafeDelete.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "player.h"
 
 /// <summary>
 /// ゲームシーン
 /// </summary>
 class GameScene {
 
+	Player* player_ = nullptr;
+
+	Sprite* sprite_ = nullptr;
+
 public: // メンバ関数
 	/// <summary>
 	/// コンストクラタ
 	/// </summary>
+	uint32_t texturureHandle_ = 0;
+	// 3Dモデル
+	Model* model_ = nullptr;
+	// ワールドトランスフォーム
+	WorldTransform worldTransform_;
+	// ビュープロジェクション
+	ViewProjection viewProjection_;
+
 	GameScene();
 
 	/// <summary>
